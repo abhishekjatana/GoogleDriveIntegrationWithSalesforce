@@ -1,0 +1,134 @@
+<template>
+    <template if:true={isSpinner}>
+        <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+        </lightning-spinner>
+   </template>
+    <div if:true={beforeAuth}>
+        <div class="logo">
+            <span class="logotext">Google Drive By Abhishek</span>
+            <div class="blue "></div>
+            <div class="yellow "></div>
+            <div class="green "></div>
+        </div>
+        <div class="authButton">
+            <lightning-button   variant="brand" label="Authorize"  onclick={authorizeGoogle}  ></lightning-button>
+        </div>
+    </div>
+    <div if:true={afterAuth}>
+        <lightning-card>
+            <lightning-layout horizontal-align="spread">
+                    <lightning-layout-item padding="around-small">
+
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small">
+                        <!-- class="round buttonborder" -->
+                        <lightning-button  label="Back" title="Back" icon-name="utility:back" onclick={handleBack} ></lightning-button>
+                    </lightning-layout-item>
+                </lightning-layout>
+            <div class="nameclass">
+                <p>Upload Files upto 4 MB</p>
+            </div>
+            <div class="uploadOuterContainer" >
+                <div class="slds-m-around_medium uploadContainer">
+                    <lightning-layout horizontal-align="true" >
+                        <lightning-layout-item >
+                            <lightning-input type="file" 
+                    accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf"
+                    label="Attachment" onchange={handleFilesChange}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item style="margin-top: 9%;">                                   
+                            <lightning-button variant="brand" label="Submit" title="Submit" onclick={handlefileSubmit} class="slds-m-left_x-small"></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                <!-- <lightning-file-upload
+                label="Upload to drive"
+                name="fileUploader"
+                accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf"
+                record-id={myRecordId}
+                onuploadfinished={handleFilesChange}
+                multiple="false">
+    </lightning-file-upload> -->
+                    
+                   
+                </div>
+               
+                <!-- <div class="uploadContainer">
+                    <lightning-button label="Upload" title="Upload action" icon-name="utility:upload" class="slds-m-left_x-small"></lightning-button>
+                </div> -->
+            </div>
+            <div class="nameclass" if:true={fileData}>
+                <p>{fileData.filename}</p>
+            </div>
+        <lightning-layout>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small">
+                <div class="filter-buttons">
+
+                    <div   onclick={listView} class="list-view-button">
+                        <lightning-icon icon-name="utility:list"></lightning-icon>
+                        <i  aria-hidden="true"></i> List view</div>
+                    <div onclick={gridView} class="grid-view-button" >
+                        <lightning-icon icon-name="utility:apps"></lightning-icon>
+                        <i  aria-hidden="true"></i> Grid view</div>
+                  </div>
+            </lightning-layout-item>
+        </lightning-layout>
+           
+                <div if:true={openListView} style="height: 500px;">
+                    <lightning-datatable
+                            key-field="id"
+                            data={showdata}
+                            columns={columns}
+                            onrowaction={handleRowAction}>
+                    </lightning-datatable>
+                </div>
+               
+
+                <lightning-layout multiple-rows="true">
+                <template if:true={openGridView} for:each={showdata}  for:item="item" for:index="index" >
+                    <div  class="grid"  key={item.index}  data-index={index}>
+                        <!-- {item.title} -->
+                        <img class="backImage" src={item.thumbnailLink} alt={altText} />
+                        <div class="insideGrid">
+                            <lightning-layout style="display: block;">
+                                <lightning-layout-item data-index={index}>
+                                    {item.title}
+                                </lightning-layout-item>
+                                <lightning-layout horizontal-align="true" style="justify-content: center;">
+                                    <lightning-layout-item >
+                                        <lightning-icon icon-name="utility:open" data-index={index}  onclick={viewSelectedData} size="small  "></lightning-icon>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item >                                   
+                                        <lightning-icon icon-name="utility:download" size="small"  data-index={index}  onclick={downloadSelectedData}></lightning-icon>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-layout>
+                        </div>
+                       
+                    </div>
+
+                </template>
+            </lightning-layout>
+       
+        
+    </lightning-card>
+
+    </div>
+    <!-- <lightning-card>
+        <lightning-layout>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small">
+                <lightning-button variant="brand" label="Auth"  onclick={authorizeGoogle} class="slds-m-left_x-small"></lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+           
+                <div style="height: 300px;">
+                    <lightning-datatable
+                            key-field="id"
+                            data={showdata}
+                            columns={columns}>
+                    </lightning-datatable>
+                </div>
+            
+       
+        
+    </lightning-card> -->
+</template>
